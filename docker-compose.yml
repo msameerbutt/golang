@@ -1,0 +1,47 @@
+version: '3.7'
+
+networks:
+  go-stack:
+
+services:
+
+  # The Application
+  app:
+    image: ${APP_BASE}/app
+    build:
+      context: ./docker/golang
+      dockerfile: dockerfile
+    container_name: app
+    command: bash
+    working_dir: /go/src
+    tty: true
+    volumes:
+      - ./src:/go/src
+    ports:
+      - 8000:8000      
+    env_file:
+      - .env
+    depends_on:
+      - mysqldb
+    networks:
+      - go-stack          
+
+  # The Database
+  mysqldb:
+    image: ${APP_BASE}/mysqldb
+    build:
+      context: ./docker/mysql
+      dockerfile: dockerfile
+    volumes:
+      - ./data/mysql:/var/lib/mysql:rw,delegated
+    restart: always   
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=3306
+    ports:
+        - "3306:3306"
+    networks:
+      - go-stack          

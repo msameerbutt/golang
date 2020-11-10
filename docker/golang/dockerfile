@@ -1,0 +1,16 @@
+FROM golang:latest
+
+# Set working directory
+WORKDIR /go/src/app
+
+# copy every thing from context directory
+COPY . .
+
+RUN go get -d -v ./...
+RUN go install -v ./...
+
+# install go dependency manager
+RUN go get -u github.com/golang/dep/cmd/dep
+
+# container default command
+CMD ["app"]
