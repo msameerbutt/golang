@@ -13,10 +13,11 @@ services:
       dockerfile: dockerfile
     container_name: app
     command: bash
-    working_dir: /go/src
+    working_dir: /go/apps
     tty: true
     volumes:
-      - ./src:/go/src
+      - ./apps:/go/apps
+      - ./bin:/go/bin
     ports:
       - 8000:8000      
     env_file:

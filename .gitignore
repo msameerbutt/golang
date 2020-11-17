@@ -139,4 +139,6 @@ fabric.properties
 ### custom ###
 .env
 .DS_Store
+bin
+.idea
 data
